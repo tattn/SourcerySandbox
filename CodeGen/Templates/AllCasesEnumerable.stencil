@@ -1,0 +1,16 @@
+{#
+enum Fruit: AllCasesEnumerable {
+    case apple
+    case banana
+    case grape
+}
+
+Fruit.allCases
+#}
+{% for enum in types.implementing.AllCasesEnumerable|enum %}
+extension {{ enum.name }} {
+    {% if not enum.hasAssociatedValues %}
+    {{ enum.accessLevel }} static let allCases: [{{ enum.name }}] = [{% for case in enum.cases %}.{{ case.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+    {% endif %}
+}
+{% endfor %}
